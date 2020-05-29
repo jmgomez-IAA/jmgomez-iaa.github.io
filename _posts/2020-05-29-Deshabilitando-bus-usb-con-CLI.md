@@ -19,7 +19,7 @@ critorio. Sin embargo, podemos emplear **-i** para indicarle una imagen (i3lock 
 
 ```shell
 ~]# lspci -tv
-```
+
 
 -+-[0000:ff]-+-0b.0  Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 R3 QPI Link 0 & 1 Monitoring
  |           +-0b.1  Intel Corporation Xeon E7 v3/Xeon E5 v3/Core i7 R3 QPI Link 0 & 1 Monitoring
@@ -42,13 +42,12 @@ critorio. Sin embargo, podemos emplear **-i** para indicarle una imagen (i3lock 
              +-1f.0  Intel Corporation C610/X99 series chipset LPC Controller
              +-1f.2  Intel Corporation C610/X99 series chipset 6-Port SATA Controller [AHCI mode]
              \-1f.3  Intel Corporation C610/X99 series chipset SMBus Controller
-			 
+```			 
 En la raiz de este árbol, tenemos [0000:00] que es el bus pci. Este PC solo tiene un bus pci del que cuelgan todos los dispositivos conectados e identificados con un numero. Si nos fijamos en la lista, nos dice que en el bus 14, tenemos el bus xHCI que se corresponde con el bus usb 3.0.
 
 Vamos a mirar con mas detalle esos disposivitos USB:
 ```
 ~]# lsusb | sort
-```
 
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 Bus 001 Device 002: ID 8087:800a Intel Corp.
@@ -65,13 +64,13 @@ Bus 004 Device 003: ID 0bda:0411 Realtek Semiconductor Corp.
 Bus 004 Device 004: ID 1825:1109
 Bus 004 Device 005: ID 1825:1109
 Bus 004 Device 006: ID 1825:1109
+```
 
 Y lo relacionamos con nuestro arbol de dispositivos pci:
 
 ```
 ~]# ls -l /sys/bus/usb/devices/
-```
-total 0
+
 1-0:1.0 -> ../../../devices/pci0000:00/0000:00:1a.0/usb1/1-0:1.0
 1-1 -> ../../../devices/pci0000:00/0000:00:1a.0/usb1/1-1
 1-1:1.0 -> ../../../devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1:1.0
@@ -102,7 +101,7 @@ usb1 -> ../../../devices/pci0000:00/0000:00:1a.0/usb1
 usb2 -> ../../../devices/pci0000:00/0000:00:1d.0/usb2
 usb3 -> ../../../devices/pci0000:00/0000:00:14.0/usb3
 usb4 -> ../../../devices/pci0000:00/0000:00:14.0/usb4
-
+```
 Tenemos 4 buses usb, en concretoe es el bus 4 el que corresponde con el dispositivo pci0000:00/0000:00:14.0 que es nuestro controlador C610/X99 series chipset USB xHCI Host Controller.
 
 Finalmente, vamos a tratar de actuar sobre este bus, activando y desactivando dispositivos.
