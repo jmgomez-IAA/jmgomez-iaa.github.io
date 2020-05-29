@@ -43,6 +43,7 @@ critorio. Sin embargo, podemos emplear **-i** para indicarle una imagen (i3lock 
              +-1f.2  Intel Corporation C610/X99 series chipset 6-Port SATA Controller [AHCI mode]
              \-1f.3  Intel Corporation C610/X99 series chipset SMBus Controller
 ```			 
+
 En la raiz de este árbol, tenemos [0000:00] que es el bus pci. Este PC solo tiene un bus pci del que cuelgan todos los dispositivos conectados e identificados con un numero. Si nos fijamos en la lista, nos dice que en el bus 14, tenemos el bus xHCI que se corresponde con el bus usb 3.0.
 
 Vamos a mirar con mas detalle esos disposivitos USB:
@@ -70,7 +71,6 @@ Y lo relacionamos con nuestro arbol de dispositivos pci:
 
 ```
 ~]# ls -l /sys/bus/usb/devices/
-
 1-0:1.0 -> ../../../devices/pci0000:00/0000:00:1a.0/usb1/1-0:1.0
 1-1 -> ../../../devices/pci0000:00/0000:00:1a.0/usb1/1-1
 1-1:1.0 -> ../../../devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1:1.0
@@ -106,14 +106,36 @@ Tenemos 4 buses usb, en concretoe es el bus 4 el que corresponde con el disposit
 
 Finalmente, vamos a tratar de actuar sobre este bus, activando y desactivando dispositivos.
 
+## Deshabilitar el controlador EHCI identificado
+```shell
+~]# echo -n "0000:00:14.0" | sudo tee /sys/bus/pci/drivers/xhci_hcd/unbind
+~]# lsusb
+Bus 002 Device 002: ID 8087:8002 Intel Corp.
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 8087:800a Intel Corp.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+```
 
-# Script
-Finalmente, vamos a instalar este script dentro de nuestros __dotfiles__, en ~/.config/i3/scripts/lock_screen.sh y ha asignarle un short-cut de teclado en el fichero de configuracion de i3wm (~/.config/i3/config).
-
+## Habilitar el controlador EHCI identificado
 
 ```shell
-~]# echo -n "0000:14:00.0" | tee /sys/bus/pci/drivers/xhci_hcd/unbind
-~]# echo -n "0000:14:00.0" | tee /sys/bus/pci/drivers/xhci_hcd/bind
+~]# echo -n "0000:00:14.0" | sudo tee /sys/bus/pci/drivers/xhci_hcd/bind
+~]# lsusb
+Bus 002 Device 002: ID 8087:8002 Intel Corp.
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 8087:800a Intel Corp.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 006: ID 1825:1109
+Bus 004 Device 005: ID 1825:1109
+Bus 004 Device 004: ID 1825:1109
+Bus 004 Device 003: ID 0bda:0411 Realtek Semiconductor Corp.
+Bus 004 Device 002: ID 0bda:0411 Realtek Semiconductor Corp.
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 005: ID 0bda:5411 Realtek Semiconductor Corp.
+Bus 003 Device 004: ID 0bda:5411 Realtek Semiconductor Corp.
+Bus 003 Device 003: ID 413c:301a Dell Computer Corp.
+Bus 003 Device 002: ID 413c:2107 Dell Computer Corp.
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 ```
 
 # Resultado
