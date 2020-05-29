@@ -15,8 +15,6 @@ Vamos a localizar un dispositivo dentro de nuestro bus usb y vamos a desactivar.
 
 El bus USB, no es un bus independiente, realente este bus esta ligado al bus PCI del que depende. El procesador no puede hablar directamente con el disposito USB, en realidad el procesor se comunica con el bus PCI en el que existe un controlador USB, que es el que se comunica con nuestro dispositivo.
 
-critorio. Sin embargo, podemos emplear **-i** para indicarle una imagen (i3lock solo soporta formato png)que empleara como pantalla de bloqueo.
-
 ```shell
 ~]# lspci -tv
 
