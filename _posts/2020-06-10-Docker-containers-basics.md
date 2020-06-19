@@ -55,21 +55,20 @@ $ docker run -it --rm archlinux bash -c "echo Hello world"
 En Arch Linux la configuracion no se almacena en el fichero.json, sino que debemos pasarla por parametros en el servicio docker.service.
 
 # Comandos rapidos
-docker info
-docker version
-docker ps
-docker search [image name]
-docker pull [image name]
-docker run [container id]
-docker stop [container id]
-docker rm [container id]
-docker network ls
-docker network inspect bridge
-docker network create --driver bridge bridge_new
-docker run --network= bridge_new -itd --name=[container ID] busybox
-docker exec -it <mycontainer> bash
-docker attach [container ID]
-
+- docker info
+- docker version
+- docker ps
+- docker search [image name]
+- docker pull [image name]
+- docker run [container id]
+- docker stop [container id]
+- docker rm [container id]
+- docker network ls
+- docker network inspect bridge
+- docker network create --driver bridge bridge_new
+- docker run --network= bridge_new -itd --name=[container ID] busybox
+- docker exec -it <mycontainer> bash
+- docker attach [container ID]
 
 ## DNS
 
