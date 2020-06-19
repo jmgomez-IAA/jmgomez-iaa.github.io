@@ -4,47 +4,48 @@ date: 2020-06-19
 categories:
   - blog
 tags:
+  - docker
   - tools
   - sysadmin
 ---
 # Alpine Linux
 
-Alpine is a lightweight linux distribution based on musl libc and busybox. There is a docker image based on Alpine which is an easy way of getting started with Alpine
-Alpine Docker Image
-
-Based on Alpine kernel, this is a lightweight image of 5mb
+Alpine es una distribución ligera de Linux basada en musl libc y busybox. Hay una imagen docker basada en Alpine de unos 5mb de tamaño.
 
 # Getting Started
-Pull the alpine image,
+Obtener la imagen de Alpine de dockerhub.
 ```
 $ docker pull alpine
 ```
 
-Check IP Address of the container
+Comprobamos la direccion ip de nuestro contenedor
 ```
 $ docker run alpine ifconfig
 ```
 
-Launching a bash shell
+Finalmente, ejecutamos una shell en el contanedor usando nuestro comando habitual
 ```
 $ docker run -i -t alpine /bin/bash
 ```
-This will give an error, as bash is not supported in alpine
+Este comando falla, ya que bash no esta soportado en alpine.
 
 > exec: "/bin/bash": stat /bin/bash: no such file or directory
 > docker: Error response from daemon: Container command not found or does not exist..
 
-Getting inside the container
+Ahora si, ejecutamos una shell sh y entramos en nuestro contenedor
 ```
 $ docker run -it alpine /bin/sh
 / #
 ```
 
-Detaching from the container without stopping **Ctrl-P Ctrl-Q**
+Salir (deattach) del contenedor sin pararlo **Ctrl-P Ctrl-Q**
 
-Check the docker container is still running
+Finalmente, comprobamos el estado del contenedor y verficamos que se esta ejecutando en segundo plano.
 ```
 $ docker ps -a
 ```
-CONTAINER ID        IMAGE                  COMMAND                  CREATED              STATUS                        PORTS                                           NAMES
-8647ce2b84a5        alpine                 "/bin/sh"                About a minute ago   Up About a minute                                                             elegant_rosalind
+
+| CONTAINER ID | IMAGE  | COMMAND  | CREATED |
+| ------------ | ------ | -------  | ------- |
+| 8647ce2b84a5  | alpine  |"/bin/sh"  | About a minute  |
+
