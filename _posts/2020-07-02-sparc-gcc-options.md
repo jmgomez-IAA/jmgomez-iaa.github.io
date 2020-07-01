@@ -34,59 +34,59 @@ Las opciones -Q -v nos permiten observar todos los parametros por defecto que em
  ```
  $ sparc-gaisler-elf-gcc -Q -v src/hello.c -o build/hello.elf 
  ```
-Entre las opciones que vienen activas por defecto nos encontramos:
- '-mcpu=v7' 
- Esta es la CPU por defecto,leon3 v7.
+Entre las opciones que vienen activas por defecto nos encontramos:  
+ '-mcpu=v7'   
+ Esta es la CPU por defecto,leon3 v7.  
 
- '-B' '/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3' 
-Esta es la direccion donde se encuentran las aplicaciones para poder compilar.
+ '-B' '/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3'   
+Esta es la direccion donde se encuentran las aplicaciones para poder compilar.  
 
-#include <...> search starts here:
- /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/include
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/include
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/include-fixed
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/../../../../sparc-gaisler-elf/include
+#include <...> search starts here:    
+ /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/include  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/include  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/include-fixed  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/../../../../sparc-gaisler-elf/include  
 
-Ahora algunos de los parametros de linkado para 
- /opt/bcc/bcc-2.1.1-gcc/bin/../libexec/gcc/sparc-gaisler-elf/7.2.0/collect2 
- -plugin /opt/bcc/bcc-2.1.1-gcc/bin/../libexec/gcc/sparc-gaisler-elf/7.2.0/liblto_plugin.so 
- -plugin-opt=/opt/bcc/bcc-2.1.1-gcc/bin/../libexec/gcc/sparc-gaisler-elf/7.2.0/lto-wrapper 
- -plugin-opt=-fresolution=/tmp/ccsU98JI.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lbcc -plugin-opt=-pass-through=-latomic -plugin-opt=-pass-through=-lc 
- -plugin-opt=-pass-through=-lgcc 
- --sysroot=/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf 
- -o build/hello.elf 
- /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/trap_table_mvt.S.o
- /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/crt0.S.o
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crti.o
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtbegin.o 
- -L/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3 
- -L/opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0 
- -L/opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc -L/opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/../../../../sparc-gaisler-elf/lib 
- -L/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/lib 
- /tmp/ccxGMEKK.o 
- -T /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/linkcmds 
- -lgcc 
- --start-group 
- -lbcc 
- -latomic 
- -lc 
- --end-group 
- -lgcc 
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtend.o 
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtn.o
+Ahora algunos de los parametros de linkado para  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../libexec/gcc/sparc-gaisler-elf/7.2.0/collect2  
+ -plugin /opt/bcc/bcc-2.1.1-gcc/bin/../libexec/gcc/sparc-gaisler-elf/7.2.0/liblto_plugin.so  
+ -plugin-opt=/opt/bcc/bcc-2.1.1-gcc/bin/../libexec/gcc/sparc-gaisler-elf/7.2.0/lto-wrapper  
+ -plugin-opt=-fresolution=/tmp/ccsU98JI.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lbcc   -plugin-opt=-pass-through=-latomic-plugin-opt=-pass-through=-lc   
+ -plugin-opt=-pass-through=-lgcc   
+ --sysroot=/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf   
+ -o build/hello.elf   
+ /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/trap_table_mvt.S.o  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/crt0.S.o  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crti.o  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtbegin.o   
+ -L/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3   
+ -L/opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0   
+ -L/opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc -L/opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/../../../../sparc-gaisler-elf/lib   
+ -L/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/lib   
+ /tmp/ccxGMEKK.o   
+ -T /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/linkcmds   
+ -lgcc   
+ --start-group   
+ -lbcc   
+ -latomic   
+ -lc   
+ --end-group   
+ -lgcc   
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtend.o   
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtn.o  
 
 Entre los parametros, tenemos los mas habituales y conocidos por todos, como son -L y -l para añadir nuestras librerias. Mediante estas dos directivas, añadimos las librerias estandar que hemos empleando en nuestro programa: libc, libbcc, libatomic, libgcc....
 
 El parametro -T se emplea para especificar nuestro linker script, donde se especifica los parametros necesario para el linkado, tamaño de la memoria, posiciones de la diferencites secciones, etc...
 
-Observamos que el linker nos incluye por defecto un conjunto de ficheros objecto, que son además especificaos para nuestra arquitectura:
-/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/trap_table_mvt.S.o
- /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/crt0.S.o
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crti.o
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtbegin.o 
-y adicionalmente añade 
-/opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtend.o 
- /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtn.o
+Observamos que el linker nos incluye por defecto un conjunto de ficheros objecto, que son además especificaos para nuestra arquitectura:  
+/opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/trap_table_mvt.S.o  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../sparc-gaisler-elf/bsp/leon3/crt0.S.o  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crti.o  
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtbegin.o   
+y adicionalmente añade   
+/opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtend.o   
+ /opt/bcc/bcc-2.1.1-gcc/bin/../lib/gcc/sparc-gaisler-elf/7.2.0/crtn.o  
 
 Estos, ficheros incluyen por ejemplo, el proceso de puesta en marcha del procesador antes de la llamada a nuestra funciona main(), el vector de interrupciones, etc...
 

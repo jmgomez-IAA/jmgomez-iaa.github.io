@@ -15,7 +15,7 @@ GCC Compiler es un compilador de C/C++ muy potente y popular para varias distrib
 # Ejemplo de código C
 
 El siguiente código básico de C (main.c) se utilizará en este artículo:
-````C
+```C
 #include <stdio.h>
 
 int main (nulo)
