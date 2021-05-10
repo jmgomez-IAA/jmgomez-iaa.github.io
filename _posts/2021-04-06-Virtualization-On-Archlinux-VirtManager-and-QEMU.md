@@ -13,8 +13,6 @@ QEMU permite emular una maquian X86_64 de modo completo y por lo tanto lanzar un
 
 ```shell
 ~]$ LC_ALL=C lscpu | grep Virtualization
-
-LC_ALL=C lscpu | grep Virtualization
 Virtualization:                  AMD-V
 ```
 Comprobamos que el modulo este instalado en nuestro kernel
@@ -37,7 +35,7 @@ CONFIG_KVM_MMU_AUDIT=y
 y que el modulo esta activo y cargado
 
 ```shell
-$ lsmod | grep kvm
+~]$ lsmod | grep kvm
 kvm_amd               131072  0
 ccp                   114688  1 kvm_amd
 kvm                   970752  1 kvm_amd
@@ -46,7 +44,7 @@ irqbypass              16384  1 kvm
 
 Aparte de emular el procesador necesitamos de soporte para algunos perifericos, memoria, redes, etc..
 ```shell
-zgrep VIRTIO /proc/config.gz 
+~]$ zgrep VIRTIO /proc/config.gz 
 CONFIG_BLK_MQ_VIRTIO=y
 CONFIG_VIRTIO_VSOCKETS=m
 CONFIG_VIRTIO_VSOCKETS_COMMON=m
@@ -90,15 +88,7 @@ De estos tres se prodian escribir, y los habrá, libros!! Asi, que enlace a la W
 __qemu__
 __libvirt__
 __virt-manager__
-
-__vde__ son un conjunto de herramientas para administrar redes virtuales.
-
-Durante la instalación, pacman nos indica donde debemos configurar estos serivicos:
-(40/47) installing vde2                                                                       [#######################################################] 100%
-vde config files should be placed in /etc/vde, sample files are provided.
-iptables and dhcpd sample files have been installed to '/usr/share/vde2'.
-Merge those examples, if needed to the according config files.
-(41/47) installing spice                                                                      
+__vde__ son un conjunto de herramientas para administrar redes virtuales. Durante la instalación, pacman nos indica donde debemos configurar vde config files should be placed in /etc/vde, sample files are provided. iptables and dhcpd sample files have been installed to '/usr/share/vde2'.                                                                 
 __dnsmasq__ y __ebtables__ se necesitan para hacer NAT/DHCP para las maquinas huesped.
 __openbsd-netcat__ nos permite administrar nuestras maquinas virtuales remotas mediante ssh.
 __dmidecode__ obtiene informacion de la bios del sistema.
@@ -136,6 +126,7 @@ Type:  'help' for help with commands
 virsh # 
 ```
 2.- Usuario
+```shell
 virsh -c qemu:///session
 Welcome to virsh, the virtualization interactive terminal.
 
@@ -143,7 +134,7 @@ Type:  'help' for help with commands
        'quit' to quit
 
 virsh # 
-
+```
 
 
 Listo!!
