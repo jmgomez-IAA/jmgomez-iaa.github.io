@@ -41,7 +41,6 @@ Para poder eliminar se emplea el comando delete, pero como nuestro disco duro es
 ~]# btrfs device delete /dev/sdc /var/cloud-data
 ERROR: error removing device '/dev/sdc': unable to go below two devices on raid1
 ```
-
 Por lo tanto en primer lugar pasamos nuestro sistema RAID1 a single, de modo que toda la información del nuestro BTRFS este contenida en un solo volumen. 
 
 ```shell
@@ -58,7 +57,7 @@ Label: 'cloud-data'  uuid: 47fccbb6-a712-4971-acb1-e3ecb44033e7
 	devid    1 size 681.51GiB used 16.00GiB path /dev/sdb1
 	devid    2 size 931.51GiB used 265.06GiB path /dev/sdc
 ```
-Borramos nuestra unidad del volumen BTRFS, para ello usamos el comando __delete__. Antes de eliminar la unidad, debe mover cualquier dato que este en ese disco a otra posicion dentro del volumen BTRFS.
+Borramos nuestra unidad del volumen BTRFS, para ello usamos el comando __delete__. Antes de eliminar la unidad, debe mover cualquier dato que este en ese disco a otra dispositivo dentro del volumen BTRFS.
 
 ```shell
 ~]# btrfs device delete /dev/sdc /var/cloud-data
@@ -75,8 +74,7 @@ Label: 'cloud-data'  uuid: 47fccbb6-a712-4971-acb1-e3ecb44033e7
 
 # Conclusiones
 
-Disco eliminado del RAID1.
-
+Hemos visto como eliminar una unidad de nuestro raid. Durante el proceso hemos reestructurado nuestro sistema de archivos cambiando de RAID1 a single, hemos redistribuido todos los datos a una de las unidades, y despues hemos eliminado el disco de nuestro sistema BTRFS.
 
 # Referencias
 [BTRFS ArchLinux Wiki](https://wiki.archlinux.org/title/Btrfs)
