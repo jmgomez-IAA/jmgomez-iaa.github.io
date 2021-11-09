@@ -1,5 +1,5 @@
 ---
-title: "-DevOps Configurar Redmine con podman en fedora"
+title: "DevOps Configurar Redmine con podman en fedora"
 date: 2021-10-20
 categories:
   - blog
@@ -9,26 +9,42 @@ tags:
   - devops
 ---
 
+Redmine es una aplicacion web para manejo de proyectos.
+
 # Descripcion
+
 
 # Procedimiento
 
-]# podman network create redmine-net
-]# podman pod create -p 3100:3000 -p 3122:22 --net redmine-net  --name
-redmine-pod
-]# mkdir postgres
-]# podman run -d -e POSTGRES_PASSWORD=testpass -e POSTGRES_DB=redmine
--e POSTGRES_USER=redmine -v ./postgres:/var/lib/postgresql/data:z
---pod redmine-pod postgres:latest
-]#   podman run -d --pod redmine-pod -e REDMINE_DB_POSTGRES=localhost
--e REDMINE_DB_USERNAME=redmine -e REDMINE_DB_PASSWORD=testpass redmine
-]#   podman logs -l
+Creamos nuestra red y nuestro pod.
+```shell
+~]# podman network create redmine-net
+~]# podman pod create -p 3180:3000 -p 3122:22 --net redmine-net  --name redmine-pod
+```
 
-udit76.iaa.es:3100
+Creamos las carpetas para los volumnes. En este caso solo la base de datos necesita almacenamiento en disco.
+```shell
+~]# mkdir -p /var/srv-data/redmine/{web-data,postgresql/data}
+```
 
-user: admin
-pass: Gl
+Postgresql
+```shell
+~]# podman run -d -e POSTGRES_PASSWORD=xxx -e POSTGRES_DB=redmine -e POSTGRES_USER=redmine -v /var/srv-data/redmine/postgresql/data:/var/lib/postgresql/data:z  --pod redmine-pod postgres:latest
+
+Redmine
+~]# podman run -d --pod redmine-pod -e REDMINE_DB_POSTGRES=localhost -e REDMINE_DB_USERNAME=XXXX -e REDMINE_DB_PASSWORD=sirio -v /var/srv-data/redmine/web-data:/usr/src/redmine/files:z redmine
+```
+
+Redmine
+```shell
+~]# podman logs -l
+```
+
+Una vez instalado, la probamos que todo esta correcto:
+http://udit76.iaa.es:3180
+Redmine nos logeamos como administradores, por defecto trae preconfigurado el usuario __admin__ con password __admin__, y cuando entremos nos pedira que re-establezcamos la contraseña.
+
+
+# Conclusiones
 
 # Referencias
-
-[Run PostgreSQL + PGAdmin in pods using podman](https://dev.to/pr0pm/run-postgresql-pgadmin-in-pods-using-podman-386o)

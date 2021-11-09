@@ -33,17 +33,18 @@ Para empezar vamos a borrar los rastros de antiguas instalacion de gitea.
 ~]# podman pod rm gitea-pod -f
 ```
 
-El acceso a Gitea se realiza a través de dos puertos expuestos en el contenedor: el puerto 22, para el acceso vía SSH y el 3000, donde se publica el servidor web. En nuestro pod vamos a mapear los puertos 22 al 222 y 3000 al 3000 que son puertos libres y disponibles en el host.
+El acceso a Gitea se realiza a través de dos puertos expuestos en el contenedor: el puerto 22, para el acceso vía SSH y el 80, donde se publica el servidor web. En nuestro pod vamos a mapear los puertos 22 al 3022 y 3000 al 3080 que son puertos libres y disponibles en el host.
 
 ## Puertos y red
-- 3000 : Puerto conexion HTTP a GITEA. 
-- 222: Puerto conexion por SSH al servidor openSSH del contenedor GITEA
-- 9187 Puerto de conexion para el postgresql exporter.
+- 3180 : Puerto conexion HTTP a GITEA. 
+- 3122: Puerto conexion por SSH al servidor openSSH del contenedor GITEA
+- 3187 Puerto de conexion para el postgresql exporter.
 
 ```shell
 ~]# podman  network create gitea-net
-~]# podman pod create -p 3000:3000 -p 222:22 -p 9187:9187 --net gitea-net  --name gitea-pod
+~]# podman pod create -p 3080:3000 -p 3022:22 -p 3087:9187 --net gitea-net  --name gitea-pod
 ```
+
 Vamos a comprobar que ha funcionado correctamente:
 
 ```shell
@@ -54,32 +55,32 @@ Vamos a comprobar que ha funcionado correctamente:
                 "22/tcp": [
                     {
                         "HostIp": "",
-                        "HostPort": "222"
+                        "HostPort": "3022"
                     }
                 ],
                 "3000/tcp": [
                     {
                         "HostIp": "",
-                        "HostPort": "3000"
+                        "HostPort": "3080"
                     }
                 ],
                 "9187/tcp": [
                     {
                         "HostIp": "",
-                        "HostPort": "9187"
+                        "HostPort": "3087"
                     }
                 ]
             },
 
 Como vemos en la informacion de nuestro pod, podman ha consigurado en el contenedor infra el mapeo de puertos:
-- 222  -->   22
-- 3000 --> 3000
-- 9187 --> 9187
+- 3022 -->   22
+- 3080 --> 3000
+- 9187 --> 3087
 
 ## Volumenes
 Necesitamos almacenar los datos de gitea en nuestro sistema host, por lo tanto vamos a crear varios volumenes:
 - **/var/srv-data/gitea/postgresql/data** Postgres Database data
-- **/var/srv-data/gitea/data** Gitea data
+- **/var/srv-data/gitea/web-data** Gitea data
 - **/etc/localtime** por que el fichero timezone no existe en Fedora, hay que usar localtime que son equivalentes.
 
 Las opcion **z** indica a podman que añada etiquetas al fichero para que SeLinux perdita su uso compartido.
@@ -99,7 +100,7 @@ Postgresql
 
 Gitea
 ```shell
-~]# podman run -d -v /var/srv-data/gitea/data:/data:z -v /etc/localtime:/etc/localtime:ro --env GITEA__database__DB_TYPE=postgres --env GITEA__database__HOST=localhost:5432 --env GITEA__database__NAME=gitea --env GITEA__database__USER=gitea --env GITEA__database__PASSWD=XXXXX --pod gitea-pod docker.io/gitea/gitea
+~]# podman run -d -v /var/srv-data/gitea/web-data:/data:z -v /etc/localtime:/etc/localtime:ro --env GITEA__database__DB_TYPE=postgres --env GITEA__database__HOST=localhost:5432 --env GITEA__database__NAME=gitea --env GITEA__database__USER=gitea --env GITEA__database__PASSWD=XXXXX --pod gitea-pod docker.io/gitea/gitea
 ```
 
 Verificamos que los contenedores esten funcionando.
@@ -115,21 +116,60 @@ Si ha ocurrido algun error podemos revisar los logs de los contendores.
 
 ```shell
 ~]# podman logs -l
+Generating /data/ssh/ssh_host_ed25519_key...
+Generating /data/ssh/ssh_host_rsa_key...
+Generating /data/ssh/ssh_host_dsa_key...
+2021/11/08 09:27:57 cmd/web.go:102:runWeb() [I] Starting Gitea on PID: 12
+2021/11/08 09:27:57 ...s/install/setting.go:21:PreloadSettings() [I] AppPath: /app/gitea/gitea
+2021/11/08 09:27:57 ...s/install/setting.go:22:PreloadSettings() [I] AppWorkPath: /app/gitea
+2021/11/08 09:27:57 ...s/install/setting.go:23:PreloadSettings() [I] Custom path: /data/gitea
+2021/11/08 09:27:57 ...s/install/setting.go:24:PreloadSettings() [I] Log path: /data/gitea/log
+2021/11/08 09:27:57 ...s/install/setting.go:25:PreloadSettings() [I] Preparing to run install page
+Generating /data/ssh/ssh_host_ecdsa_key...
+Server listening on :: port 22.
+Server listening on 0.0.0.0 port 22.
+2021/11/08 09:27:57 ...s/install/setting.go:28:PreloadSettings() [I] SQLite3 Supported
+2021/11/08 09:27:57 cmd/web.go:196:listen() [I] Listen: http://0.0.0.0:3000
+2021/11/08 09:27:57 ...s/graceful/server.go:62:NewServer() [I] Starting new Web server: tcp:0.0.0.0:3000 on PID: 12
+```
+
+La instalación ha sido un exito, vamos a crear un punto de recuperación generando un kube de forma que podamos levantar el servidor:
+```shell
+~]# podman ps -a
 ```
 
 # Configuracion y Test
  
 Si todo ha funcionado correctamente, y nuestro contenedor esta funcioando, ya podemos abrir nuestra aplicacion:
 
-http://udit76.iaa.es:3000/
+http://udit76.iaa.es:3080/
 
 Debemos de configurar algunas opciones:
 
-1.- URL BASE de GITEA: http://udit76.iaa.es:3000/
+1.- URL BASE de GITEA: http://udit76.iaa.es:3080/
 
 2.- Cuenta administador: Es buena practica crear el usuario administrador y su password. Hay que tener en cuenta que el email del administrador no puede ser reutilizado por otro usuario.
+        - admin: jmgomez
+        - pass: xx
+        - jmgomez@iaa.es
+
+3.- Servidor de correo smtp:
+    Servidor smtp: smtp.iaa.csic.es:465
+    Enviar Correos como: "andromeda" <jmgomez@iaa.es>
+
+    - Configuracion del servidor y de servicios de terceros:
+        - Habilitar autentificacion Local
+        - Deshabilitar auto-registro.
+        - Requerir inicio de sesion para ver paginas.
 
 Si queremos cambiar algo de la configuración de gitea, se hace definiendo variables en el fichero de configuracion __ /var/srv-data/gitea/data/gitea/conf/app.ini __. El uso de estas variables viene documentado en [https://docs.gitea.io/en-us/config-cheat-sheet/]([https://docs.gitea.io/en-us/config-cheat-sheet/).
+
+a) Para poder permitir, que los repositorios se puedan copiar usando ssh tenemos que editar el archivo de configuracion app.ini.
+    - DOMAIN   = udit76.iaa.es
+    - SSH_DOMAIN = udit76.iaa.es
+    - SSH_PORT = 3022
+
+b) En nuestro repositorio debemos copiar la clave publica en Configuracion/Claves de Implementación.
 
 # Mejoras
 Realmente cabe la posibilidad de lanzar los contenedores desde systemd. Esto nos permite automatizar el proceso:
@@ -141,7 +181,7 @@ Algunos de los repositorios, estarán ligados a webhooks como por ejemplo Jekyll
 # Referencias
 
 [GITEA Installation with Docker](https://docs.gitea.io/en-us/install-with-docker/)
-
+[Install a self-hosted Git server with Gitea](https://golb.hplar.ch/2018/06/self-hosted-git-server.html)
 [Dockerless, part 3: Moving development environment to containers with Podman](https://mkdev.me/en/posts/dockerless-part-3-moving-development-environment-to-containers-with-podman)
 
 [Podman - Volumes 1/2](https://blog.while-true-do.io/podman-volumes-1/)
