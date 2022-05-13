@@ -1,5 +1,5 @@
 ---
-title: "-DevOps Configurar Nextcloud con podman en fedora"
+title: "DevOps Configurar Nextcloud con podman en fedora"
 date: 2021-10-20
 categories:
   - blog
