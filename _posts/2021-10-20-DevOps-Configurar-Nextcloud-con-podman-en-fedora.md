@@ -19,6 +19,13 @@ La instalación de Nexcloud requiere de un conjunto de servicios para un correct
 
 Como vemos, nuestra aplicación requiere de un servidor de bases de datos, un conjunto de volumenes y de exponer los puertos de los servicios.
 
+Volume Migration
+Storage Virtualization
+Snapshot and Mirroring
+Auto-Provisioning
+Process Automation
+Disaster and Recovery
+
 # Procedimiento
 En primer lugar, vamos a ver con que estamos trabajando:
 ```shell
@@ -28,10 +35,13 @@ Fedora release 34 (Thirty Four)
 podman version 3.3.1
 ```
 
-Para empezar vamos a borrar los rastros de antiguas instalacion de gitea.
+Para empezar vamos a borrar los rastros de antiguas instalacion de nextcloud.
+
+Storage Resource Management (SRM)
+Storage Management Utility (SMU)
 
 ```shell
-~]# podman pod rm nextcloud-pod -f
+~]# podman pod rm smu -f
 ```
 
 El acceso a Nextcoud se realiza a través de dos puertos expuestos en el contenedor: el puerto 22, para el acceso vía SSH y el 80, donde se publica el servidor web. En nuestro pod vamos a mapear los puertos 22 al 222 y 3000 al 3000 que son puertos libres y disponibles en el host.
@@ -41,7 +51,7 @@ El acceso a Nextcoud se realiza a través de dos puertos expuestos en el contene
 
 ```shell
 ~]# podman network create nextcloud-net
-~]# podman pod create -p 3000:3000 -p 222:22 -p 9187:9187 --net nextcloud-net  --name nextcloud-pod
+~]# podman pod create -p 3380:3000 -p 3322:22 --net nextcloud-net  --name smu
 ```
 ## Volumenes
 Necesitamos almacenar los datos de gitea en nuestro sistema host, por lo tanto vamos a crear varios volumenes:
@@ -56,15 +66,18 @@ Las opcion **z** indica a podman que añada etiquetas al fichero para que SeLinu
 ```
 
 ```shell
-~]# podman pod create --name nextcloud-pod -p 4080:80 --network nextcloud-net
+~]# podman pod create --name smu -p 3380:80 --network nextcloud-net
 
-~]# podman container run -d --pod nextcloud-pod --name nextcloud_db -e POSTGRES_USER="nextcloud" --volume /var/srv-data/nextcloud/nextcloud-db:/var/lib/postgresql/data:z -e POSTGRES_PASSWORD="sirio" postgres
+~]# podman container run -d --pod smu --name nextcloud_db -e POSTGRES_USER="nextcloud" --volume /var/srv-data/nextcloud/nextcloud-db:/var/lib/postgresql/data:z -e POSTGRES_PASSWORD="sirio" postgres
 
-~]# podman container run -d --pod nextcloud-pod --name nextcloud_redis redis
+~]# podman container run -d --pod smu --name nextcloud_redis redis
 
-~]# podman container run -d --pod nextcloud-pod --name nextcloud_app -e POSTGRES_HOST="localhost" -e POSTGRES_DB="nextcloud" -e POSTGRES_USER="nextcloud" -e POSTGRES_PASSWORD="sirio" -e NEXTCLOUD_ADMIN_USER="nextcloud" -e NEXTCLOUD_ADMIN_PASSWORD="pl4t0" -e NEXTCLOUD_TRUSTED_DOMAINS="udit76.iaa.es" -e REDIS_HOST="localhost" --volume /var/srv-data/nextcloud/nextcloud-app:/var/www/html:z --volume /var/srv-data/nextcloud/nextcloud-data:/var/www/html/data:z nextcloud
+~]# podman container run -d --pod smu --name nextcloud_app -e POSTGRES_HOST="localhost" -e POSTGRES_DB="nextcloud" -e POSTGRES_USER="nextcloud" -e POSTGRES_PASSWORD="sirio" -e NEXTCLOUD_ADMIN_USER="nextcloud" -e NEXTCLOUD_ADMIN_PASSWORD="sirio" -e NEXTCLOUD_TRUSTED_DOMAINS="udit76.iaa.es" -e REDIS_HOST="localhost" --volume /var/srv-data/nextcloud/nextcloud-app:/var/www/html:z --volume /var/srv-data/nextcloud/nextcloud-data:/var/www/html/data:z nextcloud
 
 ```
+## Configuracion
+
+Esta variable permite que se pueda acceder desde fuera del servidor **-e NEXTCLOUD_TRUSTED_DOMAINS="udit76.iaa.es" **, otro metodo seria modificar el fichero de configuracion.
 
 Notas: docker exec --user www-data Nextcloud php occ config:system:set trusted_domains 2 --value=cloud
 

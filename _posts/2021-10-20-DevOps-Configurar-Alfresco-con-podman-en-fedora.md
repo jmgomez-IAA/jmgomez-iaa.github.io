@@ -38,6 +38,8 @@ volumes
 Procedimiento
 ==
 
+dms or DMS is Document Management System in case anyone wonders
+
 ~]# podman pod create --name dms --hostname dms --publish 8080:8080,8443:8443
 
 Create the directories for the volumes
@@ -72,12 +74,22 @@ drwxr-xr-x.  2 jmgomez jmgomez    6 sep 29 11:44 solr-volume-logs
 
 #Create the containers
 # Create the containers
-~]# podman create --pod dms --name postgres -v ./db-volume-data:/var/lib/postgresql/data:Z -v ./db-volume-logs:/var/log/postgresql:Z -e POSTGRES_PASSWORD=pass1234 -e POSTGRES_USER=alfresco -e POSTGRES_DB=alfresco docker.io/library/postgres:11.7 postgres -c max_connections=300 -c logging_collector=true -c log_directory=/var/log/postgresql
-~]# podman create --pod dms --name activemq -v ./activemq-volume-data:/opt/activemq/data:Z docker.io/alfresco/alfresco-activemq:5.15.8
+
+
+
+~]# podman create --pod dms --name postgres -v /var/srv-data/alfresco/db-volume-data:/var/lib/postgresql/data:Z -v /var/srv-data/alfresco/db-volume-logs:/var/log/postgresql:Z -e POSTGRES_PASSWORD=pass1234 -e POSTGRES_USER=alfresco -e POSTGRES_DB=alfresco docker.io/library/postgres:11.7 postgres -c max_connections=300 -c logging_collector=true -c log_directory=/var/log/postgresql
+
+~]# podman create --pod dms --name activemq -v /var/srv-data/alfresco/activemq-volume-data:/opt/activemq/data:Z docker.io/alfresco/alfresco-activemq:5.15.8
+
 ~]# podman create --pod dms --name transform-core-aio docker.io/alfresco/alfresco-transform-core-aio:2.3.6
-~]# podman create --pod dms --name solr6 -v ./solr-volume-data:/opt/alfresco-search-services/data:Z -v ./solr-volume-logs:/opt/alfresco-search-services/logs:Z -v ./solr-shared.properties:/opt/alfresco-search-services/solrhome/conf/shared.properties:Z,ro -v ./solr-log4j.properties:/opt/alfresco-search-services/logs/log4j.properties:Z,ro -e SOLR_ALFRESCO_HOST=localhost -e SOLR_ALFRESCO_PORT=7080 -e SOLR_SOLR_HOST=localhost -e SOLR_SOLR_PORT=8983 -e SOLR_CREATE_ALFRESCO_DEFAULTS=alfresco,archive -e ALFRESCO_SECURE_COMMS=none docker.io/alfresco/alfresco-search-services:2.0.1
-~]# podman create --pod dms --name alfresco -v ./alfresco-volume-data:/usr/local/tomcat/alf_data:Z -v ./alfresco-volume-logs:/usr/local/tomcat/logs:Z -e JAVA_TOOL_OPTIONS=" -Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede" -e JAVA_OPTS=" -Ddb.driver=org.postgresql.Driver -Ddb.username=alfresco -Ddb.password=pass1234 -Ddb.url=jdbc:postgresql://localhost:5432/alfresco -Dsolr.host=localhost -Dsolr.port=8983 -Dsolr.secureComms=none -Dsolr.base.url=/solr -Dindex.subsystem.name=solr6 -Dshare.host=localhost -Dshare.port=8080 -Dalfresco.host=localhost -Dalfresco.port=7080 -Daos.baseUrlOverwrite=http://localhost:7080/alfresco/aos -Dmessaging.broker.url=\"failover:(nio://localhost:61616)?timeout=3000&jms.useCompression=true\" -Ddeployment.method=DEFAULT -DlocalTransform.core-aio.url=http://localhost:8090/ -Dalfresco-pdf-renderer.url=http://localhost:8090/ -Djodconverter.url=http://localhost:8090/ -Dimg.url=http://localhost:8090/ -Dtika.url=http://localhost:8090/ -Dtransform.misc.url=http://localhost:8090/ -Dcsrf.filter.enabled=false -Dgoogledocs.enabled=false -Dsample.site.disabled=true -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80" docker.io/alfresco/alfresco-content-repository-community:6.2.2-RC1
-~]# podman create --pod dms --name share  -v ./share-volume-logs:/usr/local/tomcat/logs:Z -e REPO_HOST=localhost -e REPO_PORT=7080 -e JAVA_OPTS=" -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80 -Dalfresco.host=localhost -Dalfresco.port=7080 -Dalfresco.context=alfresco -Dalfresco.protocol=http" docker.io/alfresco/alfresco-share:6.2.2
+
+
+~]# podman create --pod dms --name solr6 -v /var/srv-data/alfresco/solr-volume-data:/opt/alfresco-search-services/data:Z -v /var/srv-data/alfresco/solr-volume-logs:/opt/alfresco-search-services/logs:Z -v /var/srv-data/alfresco/solr-shared.properties:/opt/alfresco-search-services/solrhome/conf/shared.properties:Z,ro -v /var/srv-data/alfresco/solr-log4j.properties:/opt/alfresco-search-services/logs/log4j.properties:Z,ro -e SOLR_ALFRESCO_HOST=localhost -e SOLR_ALFRESCO_PORT=7080 -e SOLR_SOLR_HOST=localhost -e SOLR_SOLR_PORT=8983 -e SOLR_CREATE_ALFRESCO_DEFAULTS=alfresco,archive -e ALFRESCO_SECURE_COMMS=none docker.io/alfresco/alfresco-search-services:2.0.1
+
+~]# podman create --pod dms --name alfresco -v /var/srv-data/alfresco/alfresco-volume-data:/usr/local/tomcat/alf_data:Z -v /var/srv-data/alfresco/alfresco-volume-logs:/usr/local/tomcat/logs:Z -e JAVA_TOOL_OPTIONS=" -Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=DESede/CBC/PKCS5Padding -Dencryption.keyAlgorithm=DESede -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=DESede" -e JAVA_OPTS=" -Ddb.driver=org.postgresql.Driver -Ddb.username=alfresco -Ddb.password=pass1234 -Ddb.url=jdbc:postgresql://localhost:5432/alfresco -Dsolr.host=localhost -Dsolr.port=8983 -Dsolr.secureComms=none -Dsolr.base.url=/solr -Dindex.subsystem.name=solr6 -Dshare.host=localhost -Dshare.port=8080 -Dalfresco.host=localhost -Dalfresco.port=7080 -Daos.baseUrlOverwrite=http://localhost:7080/alfresco/aos -Dmessaging.broker.url=\"failover:(nio://localhost:61616)?timeout=3000&jms.useCompression=true\" -Ddeployment.method=DEFAULT -DlocalTransform.core-aio.url=http://localhost:8090/ -Dalfresco-pdf-renderer.url=http://localhost:8090/ -Djodconverter.url=http://localhost:8090/ -Dimg.url=http://localhost:8090/ -Dtika.url=http://localhost:8090/ -Dtransform.misc.url=http://localhost:8090/ -Dcsrf.filter.enabled=false -Dgoogledocs.enabled=false -Dsample.site.disabled=true -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80" docker.io/alfresco/alfresco-content-repository-community:6.2.2-RC1
+
+
+~]# podman create --pod dms --name share  -v /var/srv-data/alfresco/share-volume-logs:/usr/local/tomcat/logs:Z -e REPO_HOST=localhost -e REPO_PORT=7080 -e JAVA_OPTS=" -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80 -Dalfresco.host=localhost -Dalfresco.port=7080 -Dalfresco.context=alfresco -Dalfresco.protocol=http" docker.io/alfresco/alfresco-share:6.2.2
   
 
 # Mount pod filesystem to modify and configure.
@@ -107,10 +119,19 @@ sed -i "s/redirectPort=\"8443\"/redirectPort=\"$TOMCAT_SSL_PORT\"/g" $TOMCAT_DIR
 
 References
 ==
+[EF09-Installing-Alfresco-components-1-by-1.pdf](https://github.com/OrderOfTheBee/beecon/blob/gh-pages/2017/assets/files/EF09/EF09-Installing-Alfresco-components-1-by-1.pdf)
+
 Este procedimiento esta extraido de 
 https://hub.alfresco.com/t5/alfresco-content-services-forum/alfresco-community-edition-with-podman/m-p/304670
 
+https://javaworld-abhinav.blogspot.com/2020/07/change-alfresco-share-proxy-and-db.html
 
+[Alfresco Port Configuration](https://hub.alfresco.com/t5/alfresco-content-services-hub/port-numbers/ba-p/290475)
+[How to debug issues with volumes mounted on rootless containers](https://www.redhat.com/sysadmin/debug-rootless-podman-mounted-volumes)
+
+[Error 05170000 Failed to create store root: "C:\Tomcat\alf_data\contentstore.deleted"](https://hub.alfresco.com/t5/alfresco-content-services-forum/error-05170000-failed-to-create-store-root-quot-c-tomcat-alf/m-p/299684)
+
+[Setup ACS-7.0.0, ASS-2.0.1 and Local Transformation Service using distribution package step by step](https://javaworld-abhinav.blogspot.com/search/label/alfresco)
 
 EXTRA BORRAR:
 
