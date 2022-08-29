@@ -27,6 +27,7 @@ Creamos nuestra red y nuestro pod.
 Creamos las carpetas para los volumnes. En este caso solo la base de datos necesita almacenamiento en disco.
 ```shell
 ~]# mkdir -p /var/srv-data/labiote/nodered/
+~]# chown 1000:1000 /var/srv-data/labiote/nodered
 ~]# mkdir -p /var/srv-data/labiote/mosquitto/{config,data,log}
 ```
 
