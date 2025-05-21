@@ -31,8 +31,7 @@ El control de servos en Arduino es muy fácil porque hay disponible una librerí
 
 El servo dispone de 3 cables: dos para su alimentación (GND y VCC) y uno de señal (Sig). 
 
-<img class="image" src="{{ site.baseurl }}/assets/images/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/sg90-pinout.png"\>
-<img src="/assets/>
+<img src="/assets/images/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/sg90-pinout.png">
 
 Es recomendable utilizar una fuente de alimentación externa, ya que Arduino puede proporcionar corriente suficiente para un servo pequeño como el SG90, pero no dispone de la suficiente energía para actuar con un servo grande o varios servos pequeños.
 
