@@ -93,7 +93,7 @@ void loop(){
 
 ## Control de un servomotor a través de un potenciómetro
 
-<img src="/assets/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/arduino-sg90-pot-sch.png">
+![Expression]({{ "/assets/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/arduino-sg90-pot-sch.png" | relative_url }}) 
 
 ```cpp
 #include "Servo.h"
