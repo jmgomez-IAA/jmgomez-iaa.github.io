@@ -27,11 +27,12 @@ El control de servos en Arduino es muy fácil porque hay disponible una librerí
 
 ## Esquema para su montaje
 
-<img src="/assets/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/arduino-sg90-sch.png">
+<img src="/assets/images/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/arduino-sg90-sch.png">
 
 El servo dispone de 3 cables: dos para su alimentación (GND y VCC) y uno de señal (Sig). 
 
-<img src="/assets/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/sg90-pinout.png">
+<img class="image" src="{{ site.baseurl }}/assets/images/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/sg90-pinout.png"\>
+<img src="/assets/>
 
 Es recomendable utilizar una fuente de alimentación externa, ya que Arduino puede proporcionar corriente suficiente para un servo pequeño como el SG90, pero no dispone de la suficiente energía para actuar con un servo grande o varios servos pequeños.
 
@@ -93,7 +94,7 @@ void loop(){
 
 ## Control de un servomotor a través de un potenciómetro
 
-![Expression]({{ "/assets/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/arduino-sg90-pot-sch.png" | relative_url }}) 
+![Schematic of the potetionmetter and arduino with servo sg90]({{ "/assets/images/2025-05-21-Uso-de-servomotores-con-arduino-servo-sg90/arduino-sg90-pot-sch.png" | relative_url }}) 
 
 ```cpp
 #include "Servo.h"
